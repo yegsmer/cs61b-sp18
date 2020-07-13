@@ -3,7 +3,8 @@ import org.junit.Test;
 
 public class ArithmeticTest {
 
-    /** Performs a few arbitrary tests to see if the product method is correct */
+    /** Performs a few arbitrary tests to see if the product method is correct
+     *all tests should be non-static methods*/
 
     @Test 
     public void testProduct() {
@@ -27,6 +28,8 @@ public class ArithmeticTest {
         assertEquals(-6, Arithmetic.sum(0, -6));
         assertEquals(0, Arithmetic.sum(6, -6));
     }
+
+
 
     /* Run the unit tests in this file. */
     public static void main(String... args) {        
