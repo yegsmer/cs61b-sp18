@@ -92,7 +92,7 @@ public class LinkedListDeque<T> {
             return null;
         }
         Node temp = sentinel;
-        while(index > 0) {
+        while (index > 0) {
             temp.next = temp.next.next;
             index -= 1;
         }
