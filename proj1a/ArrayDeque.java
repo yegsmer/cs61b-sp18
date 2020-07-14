@@ -26,14 +26,13 @@ public class ArrayDeque<T> {
         if (size < capacity / 4 && capacity > 8) {
             int y = Math.floorDiv(capacity, 2);
             T[] newItems = (T[]) new Object[y];
-            int z = Math.floorMod(nextLast - 1, capacity);
             if (nextLast > size) {
                 System.arraycopy(items, nextFirst, newItems, 0, size + 2);
                 nextFirst = 0;
                 nextLast = nextFirst + size + 1;
             } else {
-                System.arraycopy(items, 0, newItems, 0, z + 1);
-                System.arraycopy(items, nextLast + y, newItems, capacity - y - 1, capacity - z - y - 1);
+                System.arraycopy(items, 0, newItems, 0, nextLast + 1);
+                System.arraycopy(items, nextLast + y + 1, newItems, nextLast + 1, capacity - nextLast - 1 - y);
                 nextFirst = nextFirst - y;
             }
             items = newItems;
