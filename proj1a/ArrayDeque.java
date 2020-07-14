@@ -18,7 +18,7 @@ public class ArrayDeque<T> {
             T[] newItems = (T[]) new Object[capacity * 2];
             int x = Math.floorMod(nextLast - 1, capacity);
             System.arraycopy(items, 0, newItems, 0, x + 1);
-            System.arraycopy(items, nextLast, newItems,x+1+capacity,capacity-x-1);
+            System.arraycopy(items, nextLast, newItems, x + 1 + capacity,capacity - x - 1);
             items = newItems;
             nextFirst = nextFirst + capacity;
             capacity = capacity * 2;
@@ -28,12 +28,12 @@ public class ArrayDeque<T> {
             T[] newItems = (T[]) new Object[y];
             int z = Math.floorMod(nextLast - 1, capacity);
             if (nextLast > size) {
-                System.arraycopy(items, nextFirst,newItems,0,size + 2);
+                System.arraycopy(items, nextFirst, newItems, 0, size + 2);
                 nextFirst = 0;
                 nextLast = nextFirst + size + 1;
             } else {
                 System.arraycopy(items, 0, newItems, 0, z + 1);
-                System.arraycopy(items, nextLast + y, newItems,capacity - y - 1,capacity-z-y-1);
+                System.arraycopy(items, nextLast + y, newItems, capacity - y - 1, capacity-z-y-1);
                 nextFirst = nextFirst - y;
             }
             items = newItems;
@@ -57,13 +57,17 @@ public class ArrayDeque<T> {
         resize();
         size += 1;
         items[nextLast] = item;
-        if (nextLast == capacity - 1) {nextLast = 0;}
-        else {nextLast += 1;}
+        if (nextLast == capacity - 1) {
+            nextLast = 0;
+        }
+        else {
+            nextLast += 1;
+        }
     }
 
 
     public T get(int index) {
-        return items[first(nextFirst+index)];
+        return items[first(nextFirst + index)];
     }
 
     public int size() {
@@ -74,14 +78,14 @@ public class ArrayDeque<T> {
         return size == 0;
     }
 
-    private int last( int temp) {
+    private int last(int temp) {
         if (temp == 0) {
             return capacity - 1;
         }
         return temp - 1;
     }
 
-    private int first( int temp) {
+    private int first(int temp) {
         if (temp >= capacity - 1) {
             return temp + 1 - capacity;
         }
