@@ -18,7 +18,7 @@ public class ArrayDeque<T> {
             T[] newItems = (T[]) new Object[capacity * 2];
             int x = Math.floorMod(nextLast - 1, capacity);
             System.arraycopy(items, 0, newItems, 0, x + 1);
-            System.arraycopy(items, nextLast, newItems, x + 1 + capacity,capacity - x - 1);
+            System.arraycopy(items, nextLast, newItems, x + 1 + capacity, capacity - x - 1);
             items = newItems;
             nextFirst = nextFirst + capacity;
             capacity = capacity * 2;
@@ -33,7 +33,7 @@ public class ArrayDeque<T> {
                 nextLast = nextFirst + size + 1;
             } else {
                 System.arraycopy(items, 0, newItems, 0, z + 1);
-                System.arraycopy(items, nextLast + y, newItems, capacity - y - 1, capacity-z-y-1);
+                System.arraycopy(items, nextLast + y, newItems, capacity - y - 1, capacity - z - y - 1);
                 nextFirst = nextFirst - y;
             }
             items = newItems;
@@ -59,8 +59,7 @@ public class ArrayDeque<T> {
         items[nextLast] = item;
         if (nextLast == capacity - 1) {
             nextLast = 0;
-        }
-        else {
+        } else {
             nextLast += 1;
         }
     }
