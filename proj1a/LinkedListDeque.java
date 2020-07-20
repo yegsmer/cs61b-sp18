@@ -64,11 +64,13 @@ public class LinkedListDeque<T> {
     }
 
     public void printDeque() {
-        while (sentinel.next.next.item != null) {
-            System.out.print(sentinel.next.item + " ");
-            sentinel.next = sentinel.next.next;
+        Node temp = sentinel;
+        while (temp.next != sentinel) {
+            temp = temp.next;
+            System.out.print(temp.item);
+            System.out.print(" ");
         }
-        System.out.print(sentinel.next.item);
+        System.out.println();
     }
 
     public T removeFirst() {
@@ -94,15 +96,16 @@ public class LinkedListDeque<T> {
     }
 
     public T get(int index) {
-        if (isEmpty()) {
-            return null;
-        }
         Node temp = sentinel;
-        while (index > 0) {
-            temp.next = temp.next.next;
-            index -= 1;
+        int count = 0;
+        while (temp.next != sentinel) {
+            temp = temp.next;
+            if (count == index) {
+                return temp.item;
+            }
+            count = count + 1;
         }
-        return temp.next.item;
+        return null;
     }
 
 

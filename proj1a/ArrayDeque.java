@@ -1,54 +1,56 @@
+import javafx.beans.binding.ObjectBinding;
+
 public class ArrayDeque<T> {
     private int size;
     private int nextFirst;
     private int nextLast;
     private T[] items;
-    private int capacity;
+    private static int INIT_CAPACITY = 8;
 
     public ArrayDeque() {
         size = 0;
-        capacity = 8;
-        items = (T[]) new Object[capacity];
-        nextFirst = 3;
-        nextLast = 4;
+        items = (T[]) new Object[INIT_CAPACITY];
+        nextFirst = 0;
+        nextLast = 1;
     }
 
     private void resize() {
-        if (size == capacity) {
-            T[] newItems = (T[]) new Object[capacity * 2];
-            int x = Math.floorMod(nextLast - 1, capacity);
-            System.arraycopy(items, 0, newItems, 0, x + 1);
-            System.arraycopy(items, nextLast, newItems, x + 1 + capacity, capacity - x - 1);
-            items = newItems;
-            nextFirst = nextFirst + capacity;
-            capacity = capacity * 2;
+        if (size == items.length) {
+            expand();
         }
-        if (size < capacity / 4 && capacity > 8) {
-            int y = Math.floorDiv(capacity, 2);
-            T[] newItems = (T[]) new Object[y];
-            if (nextLast > size) {
-                System.arraycopy(items, nextFirst, newItems, 0, size + 2);
-                nextFirst = 0;
-                nextLast = nextFirst + size + 1;
-            } else {
-                System.arraycopy(items, 0, newItems, 0, nextLast + 1);
-                System.arraycopy(items, nextLast + y + 1, newItems, nextLast + 1, capacity - nextLast - 1 - y);
-                nextFirst = nextFirst - y;
-            }
-            items = newItems;
-            capacity = capacity - y;
+        if (size < items.length / 4 && items.length > 8) {
+            reduce();
         }
+    }
+
+    private void resizeHelper(int capacity) {
+        T[] temp = items;
+        int begin = plusOne(nextFirst);
+        int end = minusOne(nextFirst);
+        items = (T[]) new Object[capacity];
+        nextFirst = 0;
+        nextLast = 1;
+        for (int i = begin; i != end; i = plusOne(i, temp.length)) {
+            items[nextLast] = temp[i];
+            nextLast = plusOne(nextLast);
+        }
+        items[nextLast] = temp[end];
+        nextLast = plusOne(nextLast);
+    }
+
+    private void expand() {
+        resizeHelper(items.length * 2);
+    }
+
+    private void reduce() {
+        resizeHelper(items.length / 2);
     }
 
     public void addFirst(T item) {
         resize();
         size += 1;
         items[nextFirst] = item;
-        if (nextFirst == 0) {
-            nextFirst = capacity - 1;
-        } else {
-            nextFirst -= 1;
-        }
+        nextFirst = minusOne(nextFirst);
 
     }
 
@@ -56,16 +58,16 @@ public class ArrayDeque<T> {
         resize();
         size += 1;
         items[nextLast] = item;
-        if (nextLast == capacity - 1) {
-            nextLast = 0;
-        } else {
-            nextLast += 1;
-        }
+        nextLast = plusOne(nextLast);
     }
 
 
     public T get(int index) {
-        return items[first(nextFirst + index)];
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        int temp = Math.floorMod(plusOne(nextFirst) + index, items.length);
+        return items[temp];
     }
 
     public int size() {
@@ -76,46 +78,42 @@ public class ArrayDeque<T> {
         return size == 0;
     }
 
-    private int last(int temp) {
-        if (temp == 0) {
-            return capacity - 1;
-        }
-        return temp - 1;
+    private int minusOne(int index) {
+        return Math.floorMod(index - 1, items.length);
     }
 
-    private int first(int temp) {
-        if (temp >= capacity - 1) {
-            return temp + 1 - capacity;
-        }
-        return temp + 1;
+    private int plusOne(int index) {
+        return Math.floorMod(index + 1, items.length);
+    }
+
+    private int plusOne(int index, int length){
+        return Math.floorMod(index + 1, length);
     }
 
     public T removeFirst() {
         resize();
         size = size - 1;
-        T temp = items[first(nextFirst)];
-        items[first(nextFirst)] = null;
-        nextFirst = first(nextFirst);
+        T temp = items[plusOne(nextFirst)];
+        items[plusOne(nextFirst)] = null;
+        nextFirst = plusOne(nextFirst);
         return temp;
     }
 
     public T removeLast() {
         resize();
         size = size - 1;
-        T temp = items[first(nextLast)];
-        items[first(nextLast)] = null;
-        nextLast = first(nextLast);
+        T temp = items[minusOne(nextLast)];
+        items[minusOne(nextLast)] = null;
+        nextLast = minusOne(nextLast);
         return temp;
     }
 
     public void printDeque() {
-        int res = first(nextFirst);
-        int ano = last(nextLast);
-        while (res != ano) {
-            System.out.print(items[res].toString() + " ");
-            res = first(res);
+        for (int index = plusOne(nextFirst); index != nextLast; index = plusOne(index)) {
+            System.out.print(items[index]);
+            System.out.print(" ");
         }
-        System.out.print(items[res].toString());
+        System.out.println();
     }
 
 }
