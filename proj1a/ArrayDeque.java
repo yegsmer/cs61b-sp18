@@ -1,6 +1,6 @@
 import javafx.beans.binding.ObjectBinding;
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T>{
     private int size;
     private int nextFirst;
     private int nextLast;
@@ -46,6 +46,7 @@ public class ArrayDeque<T> {
         resizeHelper(items.length / 2);
     }
 
+    @Override
     public void addFirst(T item) {
         resize();
         size += 1;
@@ -53,7 +54,7 @@ public class ArrayDeque<T> {
         nextFirst = minusOne(nextFirst);
 
     }
-
+    @Override
     public void addLast(T item) {
         resize();
         size += 1;
@@ -61,7 +62,7 @@ public class ArrayDeque<T> {
         nextLast = plusOne(nextLast);
     }
 
-
+    @Override
     public T get(int index) {
         if (index < 0 || index >= size) {
             return null;
@@ -70,10 +71,12 @@ public class ArrayDeque<T> {
         return items[temp];
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
@@ -90,6 +93,7 @@ public class ArrayDeque<T> {
         return Math.floorMod(index + 1, length);
     }
 
+    @Override
     public T removeFirst() {
         resize();
         size = size - 1;
@@ -99,6 +103,7 @@ public class ArrayDeque<T> {
         return temp;
     }
 
+    @Override
     public T removeLast() {
         resize();
         size = size - 1;
@@ -108,6 +113,7 @@ public class ArrayDeque<T> {
         return temp;
     }
 
+    @Override
     public void printDeque() {
         for (int index = plusOne(nextFirst); index != nextLast; index = plusOne(index)) {
             System.out.print(items[index]);
