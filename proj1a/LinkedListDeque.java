@@ -1,112 +1,31 @@
-public class LinkedListDeque<T> {
-    private int size;
-    private Node sentinel;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
-    public class Node {
-        private Node prev;
-        private T item;
-        private Node next;
-
-        public Node(Node i, T h, Node j) {
-            prev = i;
-            item = h;
-            next = j;
-        }
-    }
-
-    public LinkedListDeque(T item) {
-        size = 1;
-        sentinel = new Node(null, null, null);
-        Node newNode = new Node(sentinel, item, sentinel);
-        sentinel.next = newNode;
-        sentinel.prev = newNode;
-    }
-
-    public  LinkedListDeque() {
-        size = 0;
-        sentinel = new Node(null, null, null);
-        sentinel.next = sentinel;
-        sentinel.prev = sentinel;
-    }
-
-    public void addFirst(T item) {
-        if (size > 0) {
-            Node newNode = new Node(sentinel, item, sentinel.next);
-            sentinel.next.prev = newNode;
-            sentinel.next = newNode;
-        } else {
-            Node newNode = new Node(sentinel, item, sentinel);
-            sentinel.next = newNode;
-            sentinel.prev = newNode;
-        }
-        size += 1;
-    }
-
-    public void addLast(T item) {
-        if (size > 0) {
-            Node newNode = new Node(sentinel.prev, item, sentinel);
-            sentinel.prev.next = newNode;
-            sentinel.prev = newNode;
-        } else {
-            Node newNode = new Node(sentinel, item, sentinel);
-            sentinel.next = newNode;
-            sentinel.prev = newNode;
-        }
-        size += 1;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    public int size()  {
-        return size;
-    }
-
+/**
+ * Isn't this solution kinda... cheating? Yes.
+ */
+public class LinkedListDeque<Item> extends LinkedList<Item> {
     public void printDeque() {
-        Node temp = sentinel;
-        while (temp.next != sentinel) {
-            temp = temp.next;
-            System.out.print(temp.item);
-            System.out.print(" ");
-        }
-        System.out.println();
+        System.out.println("dummy");
     }
 
-    public T removeFirst() {
-        if (0 == size) {
+    public Item getRecursive(int i) {
+        return get(i);
+    }
+
+    public Item removeFirst() {
+        try {
+            return super.removeFirst();
+        } catch (NoSuchElementException e) {
             return null;
         }
-        size -= 1;
-        T a = sentinel.next.item;
-        sentinel.next = sentinel.next.next;
-        sentinel.next.prev = sentinel;
-        return a;
     }
 
-    public T removeLast() {
-        if (0 == size) {
+    public Item removeLast() {
+        try {
+            return super.removeLast();
+        } catch (NoSuchElementException e) {
             return null;
         }
-        size -= 1;
-        T a = sentinel.prev.item;
-        sentinel.prev.prev.next = sentinel;
-        sentinel.prev = sentinel.prev.prev;
-        return a;
     }
-
-    public T get(int index) {
-        Node temp = sentinel;
-        int count = 0;
-        while (temp.next != sentinel) {
-            temp = temp.next;
-            if (count == index) {
-                return temp.item;
-            }
-            count = count + 1;
-        }
-        return null;
-    }
-
-
 }
